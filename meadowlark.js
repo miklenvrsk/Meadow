@@ -3,29 +3,23 @@ var app = express();
 
 var app = express();
 // Установка механизма представления handlebars
-var fortunes = [
-    "Победи свои страхи, или они победят тебя.",
-    "Рекам нужны истоки.",
-    "Не бойся неведомого.",
-    "Тебя ждет приятный сюрприз.",
-    "Будь проще везде, где только можно.",
-    ];
+
 var handlebars = require('express-handlebars')
 .create({ defaultLayout:'main' });
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-
+var fortune = require('./lib/fortune.js');
 app.set('port', process.env.PORT || 3000);
 // промежуточное по
 app.use(express.static(__dirname + '/public'));
 // маршруты 
+
 app.get('/', function(req, res) {
-    var randomFortune =fortunes[Math.floor(Math.random() * fortunes.length)];
-    res.render('about', { fortune: randomFortune });
+    res.render('home');
     });
 
 app.get('/about', function(req, res) {
-    res.render('about');
+    res.render('about', { fortune: fortune.getFortune() } );
     });
 
     // Обобщенный обработчик 404 (промежуточное ПО)
